@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="author" content="Oyebade Ayomide">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="twinz.css">
+    <script src="twinz.js" defer></script>
+    <title>Login — Twinzlove_products</title>
+</head>
+<body>
+    <header>
+         <a href="twinz.html"><img id="first-image" src="Images/twinzloveproducts.jpeg" alt="home"></a>
+        
+        <div id="former">        
+            <form action="http://www.examples.com/login.php" method="get" id="searchbar">
+                <input type="search" name="search" id="search" placeholder="search">
+                <button  id="butt">
+                            <img id="mag" src="Images/magnifying-glass-icon-isolated-on-white-background-search-illustration-vector.jpg" alt="">
+                        </button> 
+                                  
+            </form>
+            <a id="login" href="login.html">Login</a>
+            <a href="cart.html">
+                <span class="cart-icon-wrap">
+                    <img id="cart" src="Images/cart.svg" alt="Cart">
+                    <span id="cart-badge" class="cart-badge">0</span>
+                </span>
+            </a>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <h1>Welcome back</h1>
+        <p>Log in to your Twinzlove_products account.</p>
+
+        <form class="auth-form" id="loginForm">
+            <label for="loginIdentifier">Email or Username</label>
+            <input type="text" id="loginIdentifier" name="loginIdentifier" required autocomplete="username">
+
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" name="loginPassword" required autocomplete="current-password">
+
+            <div class="auth-error" id="loginError"></div>
+
+            <button type="submit" class="auth-submit">Log In</button>
+        </form>
+
+        <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></p>
+    </main>
+
+    <footer>
+        <address>
+            CONTACT US <br />
+            <img id="fool" src="Images/download.png" alt=""> +2348162487439 <br />
+            <img src="Images/pin-location-icon-vector-iconic-design-symbol-transparency-grid-94181514.jpg" alt="" height="20px"> Prince house, Sokelu, Royal Estate, Ago area, Olunde, Ibadan. <br />
+            <img src="Images/accepted.png" alt="" height="50px">
+        </address>
+        <div id="sign">
+            <p>SIGN UP FOR DISCOUNTS AND UPDATES</p>
+            <form action="http://www.examples.com/login.php" method="post">
+                <input type="text" name="sub" id="sub" placeholder="Enter your email address or phone number"> <br />
+                <input type="submit" name="sub" id="submit" value="Subscribe">
+            </form>
+        </div>
+    </footer>
+</body>
+</html>

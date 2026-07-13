@@ -1,0 +1,4 @@
+Lists in HTML
+we have the ordered list<OL></ol>
+and we have the unordered list<ul></ul>
+and in between is our list item<li></li>

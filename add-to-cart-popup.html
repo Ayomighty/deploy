@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fieldwork — Add to Cart Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #171A1C;
+    --muted: #6B7069;
+    --paper: #EFF1EA;
+    --surface: #FFFFFF;
+    --border: #E1E4DA;
+    --brand: #2F5D50;
+    --brand-dark: #22453B;
+    --cta: #D2491F;
+    --cta-dark: #AE3B18;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-pill: 999px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body.no-scroll { overflow: hidden; }
+
+  .shop {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--brand);
+    margin: 0 0 8px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 5vw, 44px);
+    font-weight: 600;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .subhead {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0 0 36px;
+    max-width: 46ch;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .product-image {
+    aspect-ratio: 1;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+  }
+
+  .product-card h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .price {
+    font-weight: 700;
+    font-size: 15px;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .add-to-cart-btn {
+    margin-top: 4px;
+    background: var(--brand);
+    color: white;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 10px 16px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .add-to-cart-btn:hover { background: var(--brand-dark); }
+  .add-to-cart-btn:active { transform: scale(0.97); }
+
+  /* Overlay + popup */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(23, 26, 28, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 100;
+  }
+  .overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 420px;
+    padding: 28px;
+    position: relative;
+    transform: scale(0.94) translateY(8px);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .overlay.is-open .modal {
+    transform: scale(1) translateY(0);
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .close-btn:hover { background: var(--paper); }
+
+  .modal-product {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-right: 28px;
+  }
+
+  .modal-image {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    flex-shrink: 0;
+  }
+
+  .modal-info h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 500;
+    margin: 0 0 4px;
+  }
+
+  .modal-info p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 18px 0;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .row-label {
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border: 1.5px solid var(--brand);
+    border-radius: var(--radius-pill);
+    padding: 4px;
+  }
+
+  .stepper button {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--brand);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+  }
+  .stepper button:hover:not(:disabled) { background: var(--paper); }
+  .stepper button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .stepper span {
+    min-width: 28px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .total-value {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .pay-now-btn {
+    width: 100%;
+    margin-top: 22px;
+    background: var(--cta);
+    color: white;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 15px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .pay-now-btn:hover { background: var(--cta-dark); }
+  .pay-now-btn:active { transform: scale(0.98); }
+
+  .continue-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 8px;
+  }
+  .continue-btn:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .modal, .overlay { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<main class="shop">
+  <p class="eyebrow">New arrivals</p>
+  <h1>Fieldwork</h1>
+  <p class="subhead">Everyday gear, made to last. Click "Add to Cart" on anything below to see the popup in action.</p>
+  <div class="product-grid" id="productGrid"><!-- rendered by JS --></div>
+</main>
+
+<!-- Popup: stays in the DOM at all times, CSS handles show/hide -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalName">
+    <button class="close-btn" id="closeBtn" aria-label="Close">&times;</button>
+
+    <div class="modal-product">
+      <div class="modal-image" id="modalImage"></div>
+      <div class="modal-info">
+        <h2 id="modalName"></h2>
+        <p id="modalUnitPrice"></p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row">
+      <span class="row-label">Quantity</span>
+      <div class="stepper">
+        <button id="decreaseBtn" aria-label="Decrease quantity">−</button>
+        <span id="qtyValue">1</span>
+        <button id="increaseBtn" aria-label="Increase quantity">+</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row">
+      <span class="row-label">Total</span>
+      <span class="total-value" id="totalPrice">$0.00</span>
+    </div>
+
+    <button class="pay-now-btn" id="payNowBtn">Pay Now</button>
+    <button class="continue-btn" id="continueBtn">Continue Shopping</button>
+  </div>
+</div>
+
+<script>
+  // In a real app this array comes from your database/API.
+  const PRODUCTS = [
+    { id: "headphones", name: "Aria Wireless Headphones", price: 79.99, emoji: "🎧", gradient: "linear-gradient(135deg, #2F5D50, #7FB69A)" },
+    { id: "watch",      name: "Pulse Smart Watch",         price: 129.99, emoji: "⌚", gradient: "linear-gradient(135deg, #D2491F, #F2A65A)" },
+    { id: "shoes",      name: "Drift Running Shoes",       price: 89.99, emoji: "👟", gradient: "linear-gradient(135deg, #2B4B6F, #6FA8DC)" },
+    { id: "backpack",   name: "Trail Canvas Backpack",     price: 49.99, emoji: "🎒", gradient: "linear-gradient(135deg, #7A5C3E, #C9A66B)" },
+  ];
+
+  const getProduct = (id) => PRODUCTS.find((p) => p.id === id);
+
+  // ---- Render the product grid from data ----
+  const grid = document.getElementById("productGrid");
+
+  grid.innerHTML = PRODUCTS.map((p) => `
+    <article class="product-card">
+      <div class="product-image" style="background:${p.gradient}">${p.emoji}</div>
+      <h3>${p.name}</h3>
+      <p class="price">$${p.price.toFixed(2)}</p>
+      <button class="add-to-cart-btn" data-product-id="${p.id}">Add to Cart</button>
+    </article>
+  `).join("");
+
+  // ---- Popup elements ----
+  const overlay = document.getElementById("overlay");
+  const modalImage = document.getElementById("modalImage");
+  const modalName = document.getElementById("modalName");
+  const modalUnitPrice = document.getElementById("modalUnitPrice");
+  const qtyValue = document.getElementById("qtyValue");
+  const totalPrice = document.getElementById("totalPrice");
+  const decreaseBtn = document.getElementById("decreaseBtn");
+  const increaseBtn = document.getElementById("increaseBtn");
+  const closeBtn = document.getElementById("closeBtn");
+  const continueBtn = document.getElementById("continueBtn");
+  const payNowBtn = document.getElementById("payNowBtn");
+
+  const MAX_QTY = 10;
+  const state = { productId: null, quantity: 1 };
+
+  function render() {
+    const product = getProduct(state.productId);
+    if (!product) return;
+    modalImage.style.background = product.gradient;
+    modalImage.textContent = product.emoji;
+    modalName.textContent = product.name;
+    modalUnitPrice.textContent = `$${product.price.toFixed(2)} each`;
+    qtyValue.textContent = state.quantity;
+    totalPrice.textContent = `$${(product.price * state.quantity).toFixed(2)}`;
+    decreaseBtn.disabled = state.quantity <= 1;
+    increaseBtn.disabled = state.quantity >= MAX_QTY;
+  }
+
+  function openModal(productId) {
+    state.productId = productId;
+    state.quantity = 1;
+    render();
+    overlay.classList.add("is-open");
+    document.body.classList.add("no-scroll");
+    closeBtn.focus();
+  }
+
+  function closeModal() {
+    overlay.classList.remove("is-open");
+    document.body.classList.remove("no-scroll");
+  }
+
+  // Event delegation: ONE listener on the grid catches clicks from every
+  // "Add to Cart" button, including ones rendered after the page loads.
+  grid.addEventListener("click", (e) => {
+    const btn = e.target.closest(".add-to-cart-btn");
+    if (!btn) return;
+    openModal(btn.dataset.productId);
+  });
+
+  decreaseBtn.addEventListener("click", () => {
+    if (state.quantity > 1) {
+      state.quantity--;
+      render();
+    }
+  });
+
+  increaseBtn.addEventListener("click", () => {
+    if (state.quantity < MAX_QTY) {
+      state.quantity++;
+      render();
+    }
+  });
+
+  closeBtn.addEventListener("click", closeModal);
+  continueBtn.addEventListener("click", closeModal);
+
+  // Click on the dark backdrop (not the modal itself) closes it
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  // Escape key closes it too
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && overlay.classList.contains("is-open")) closeModal();
+  });
+
+  payNowBtn.addEventListener("click", () => {
+    const product = getProduct(state.productId);
+    alert(
+      `Charging $${(product.price * state.quantity).toFixed(2)} for ${state.quantity} × ${product.name}.\n\n` +
+      `(This is where you'd call your payment provider — Paystack, Flutterwave, or Stripe.)`
+    );
+    closeModal();
+  });
+</script>
+
+</body>
+</html>
