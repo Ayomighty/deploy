@@ -4,69 +4,128 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="author" content="Oyebade Ayomide">
+    <meta name="author" content="Oyebade Ayomide">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="twinz.css">
-    <script src="twinz.js" defer></script>
-    <title>Login — Twinzlove_products</title>
+    <title>Account - Twinzlove_products</title>
 </head>
 <body>
     <header>
-         <a href="twinz.html"><img id="first-image" src="Images/twinzloveproducts.jpeg" alt="home"></a>
-        
-        <div id="former">        
-            <form action="http://www.examples.com/login.php" method="get" id="searchbar">
-                <input type="search" name="search" id="search" placeholder="search">
-                <button  id="butt">
-                            <img id="mag" src="Images/magnifying-glass-icon-isolated-on-white-background-search-illustration-vector.jpg" alt="">
-                        </button> 
-                                  
-            </form>
-            <a id="login" href="login.html">Login</a>
-            <a href="cart.html">
+        <a href="index.html"><img id="first-image" src="Images/twinzloveproducts.jpeg" alt="home"></a>
+        <div class="header-right">
+            <a href="cart.html" class="cart-link">
                 <span class="cart-icon-wrap">
                     <img id="cart" src="Images/cart.svg" alt="Cart">
-                    <span id="cart-badge" class="cart-badge">0</span>
                 </span>
             </a>
         </div>
     </header>
 
-    <main class="auth-page">
-        <h1>Welcome back</h1>
-        <p>Log in to your Twinzlove_products account.</p>
+    <main class="auth-main">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <button type="button" class="tab-btn active" id="tabLogin">Login</button>
+                <button type="button" class="tab-btn" id="tabRegister">Register</button>
+            </div>
 
-        <form class="auth-form" id="loginForm">
-            <label for="loginIdentifier">Email or Username</label>
-            <input type="text" id="loginIdentifier" name="loginIdentifier" required autocomplete="username">
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <h2>Welcome Back</h2>
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="auth-submit-btn">Login</button>
+            </form>
 
-            <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" name="loginPassword" required autocomplete="current-password">
-
-            <div class="auth-error" id="loginError"></div>
-
-            <button type="submit" class="auth-submit">Log In</button>
-        </form>
-
-        <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></p>
-    </main>
-
-    <footer>
-        <address>
-            CONTACT US <br />
-            <img id="fool" src="Images/download.png" alt=""> +2348162487439 <br />
-            <img src="Images/pin-location-icon-vector-iconic-design-symbol-transparency-grid-94181514.jpg" alt="" height="20px"> Prince house, Sokelu, Royal Estate, Ago area, Olunde, Ibadan. <br />
-            <img src="Images/accepted.png" alt="" height="50px">
-        </address>
-        <div id="sign">
-            <p>SIGN UP FOR DISCOUNTS AND UPDATES</p>
-            <form action="http://www.examples.com/login.php" method="post">
-                <input type="text" name="sub" id="sub" placeholder="Enter your email address or phone number"> <br />
-                <input type="submit" name="sub" id="submit" value="Subscribe">
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form hidden">
+                <h2>Create Account</h2>
+                <div class="form-group">
+                    <label for="regUsername">Full Name</label>
+                    <input type="text" id="regUsername" required placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" required placeholder="Create a password">
+                </div>
+                <button type="submit" class="auth-submit-btn">Sign Up</button>
             </form>
         </div>
-    </footer>
+    </main>
+
+    <script>
+        // Inline router bridge connecting to twinz.js local storage logic
+        const USERS_KEY = "twinz_users";
+        const SESSION_KEY = "twinz_session";
+
+        const tabLogin = document.getElementById('tabLogin');
+        const tabRegister = document.getElementById('tabRegister');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        tabLogin.addEventListener('click', () => {
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+        });
+
+        tabRegister.addEventListener('click', () => {
+            tabRegister.classList.add('active');
+            tabLogin.classList.remove('active');
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        });
+
+        // Registration handler
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+            if (users.find(u => u.email === email)) {
+                alert('An account with this email already exists.');
+                return;
+            }
+
+            users.push({ username, email, password });
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+            localStorage.setItem(SESSION_KEY, JSON.stringify({ username, email }));
+            
+            alert('Registration successful!');
+            window.location.href = 'index.html';
+        });
+
+        // Login handler
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (!user) {
+                alert('Invalid email or password.');
+                return;
+            }
+
+            localStorage.setItem(SESSION_KEY, JSON.stringify({ username: user.username, email: user.email }));
+            window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>

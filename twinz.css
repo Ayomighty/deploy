@@ -581,3 +581,89 @@ footer {
         max-width: 100%;
     }
 }
+/* ===== LOGIN & SIGNUP STYLES ===== */
+.auth-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px);
+    padding: 20px;
+    box-sizing: border-box;
+}
+.auth-container {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+.auth-tabs {
+    display: flex;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #f0f0f0;
+}
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-family: 'Merriweather', serif;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn.active {
+    color: green;
+    border-bottom: 3px solid green;
+    font-weight: bold;
+}
+.auth-form h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.form-group label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.form-group input {
+    height: 45px;
+    padding: 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.form-group input:focus {
+    border-color: green;
+}
+.auth-submit-btn {
+    width: 100%;
+    height: 48px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+.auth-submit-btn:hover {
+    background-color: darkgreen;
+}
+.hidden {
+    display: none;
+}
